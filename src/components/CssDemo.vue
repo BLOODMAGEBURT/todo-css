@@ -16,7 +16,7 @@
         香菇鸡
       </div>
       <div class="col-5 search-bar">
-        <input type="text">
+        <input type="text" class="search-text">
         <button class="fr">搜索</button>
       </div>
       <div class="col-3">
@@ -103,6 +103,9 @@ export default {
   .header .search-bar button {
     padding: 10px;
     width: 20%;
+  }
+  .search-text {
+    height: 100%;
   }
   .col-1,
   .col-2,
