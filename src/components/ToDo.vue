@@ -8,31 +8,33 @@
     </div>
     <form id="task-form" @submit.prevent="addOrUpdate">
       <div class="wrap">
-        <input type="text" id="task-input" @keyup.enter="addOrUpdate" v-model="current.title">
+        <input type="text" id="task-input" @keyup.enter="addOrUpdate" v-model="current.title" autocomplete="off"/>
         <button type="submit">submit</button>
       </div>
     </form>
     <div class="task-list">
       <div class="wrap">
         未完成
-        <div class="task-item" v-for="(item, index) in list" :key="item.index">
-          {{item.title}}--{{ index }}
-          <button @click="remove(index)">删除</button>
-          <button @click="current=item">更新</button>
-        </div>
+        <TaskItem v-if="!item.completed" v-for="item in list" :key="item.id" :item="item">
+        </TaskItem>
       </div>
     </div>
     <div class="task-list">
       <div class="wrap">
         已完成
-        <div class="task-item">adipisicing elit. Ab aliquid et obcaecati quam! Dolore</div>
-        <div class="task-item">adipisicing elit. Ab aliquid et obcaecati quam! Dolore</div>
+        <div class="task-item" v-if="item.completed" v-for="(item, index) in list" :key="item.id">
+          <button @click="toggle(item.id)">未完成</button>
+          {{item.title}}--{{ index }}
+          <button @click="remove(item.id)">删除</button>
+          <button @click="setCurrent(item)">更新</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import TaskItem from './TaskItem'
 export default {
   name: 'todo',
   data () {
@@ -41,10 +43,14 @@ export default {
       list: []
     }
   },
+  mounted () {
+    this.list = window.ms.get('list') || []
+  },
   methods: {
     addOrUpdate () {
-      let id = this.current.id
-      let title = this.current.title
+      let currentTodo = this.copy(this.current)
+      let id = currentTodo.id
+      let title = currentTodo.title
       if (id) {
         // update
         let todo = this.list.find(item => item.id === id)
@@ -53,19 +59,46 @@ export default {
         // add
         if (!title) return
         console.log(123)
-        let todo = Object.assign({}, this.current)
-        todo.id = this.getNextId()
-        this.list.push(todo)
+        currentTodo.id = this.getNextId()
+        currentTodo.completed = false
+        this.list.push(currentTodo)
       }
-      this.current.title = ''
+      this.reset()
     },
-    remove (index) {
+    remove (id) {
+      let index = this.list.findIndex(item => item.id === id)
       this.list.splice(index, 1)
     },
     // getNextId: () => this.list.length + 1
     getNextId () {
       return this.list.length + 1
+    },
+    setCurrent (item) {
+      this.current = this.copy(item)
+    },
+    reset () {
+      this.setCurrent({})
+    },
+    copy: obj => Object.assign({}, obj),
+    toggle (itemId) {
+      let todo = this.list.find(item => item.id === itemId)
+      todo.completed = !todo.completed
     }
+  },
+  watch: {
+    list: {
+      deep: true,
+      handler (newVal, oldVal) {
+        if (newVal) {
+          window.ms.set('list', newVal)
+        } else {
+          window.ms.set('list', [])
+        }
+      }
+    }
+  },
+  components: {
+    TaskItem: TaskItem
   }
 }
 function set (key, val) {
@@ -117,7 +150,7 @@ window.ms = {
     margin: 0 auto;
   }
   input, button {
-    display: block;
+    display: inline-block;
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 3px;
     padding: 5px 10px;
