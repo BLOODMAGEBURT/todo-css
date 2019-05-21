@@ -15,19 +15,25 @@
     <div class="task-list">
       <div class="wrap">
         未完成
-        <TaskItem v-if="!item.completed" v-for="item in list" :key="item.id" :item="item">
+        <TaskItem v-if="!item.completed"
+                  v-for="item in list"
+                  :key="item.id" :todoItem="item"
+                  @remove="removeSon"
+                  @toggle="toggleSon"
+                  @setCurrent="setCurrentSon">
         </TaskItem>
       </div>
     </div>
     <div class="task-list">
       <div class="wrap">
         已完成
-        <div class="task-item" v-if="item.completed" v-for="(item, index) in list" :key="item.id">
-          <button @click="toggle(item.id)">未完成</button>
-          {{item.title}}--{{ index }}
-          <button @click="remove(item.id)">删除</button>
-          <button @click="setCurrent(item)">更新</button>
-        </div>
+        <TaskItem v-if="item.completed"
+                  v-for="item in list"
+                  :key="item.id" :todoItem="item"
+                  @remove="removeSon"
+                  @toggle="toggleSon"
+                  @setCurrent="setCurrentSon">
+        </TaskItem>
       </div>
     </div>
   </div>
@@ -83,6 +89,15 @@ export default {
     toggle (itemId) {
       let todo = this.list.find(item => item.id === itemId)
       todo.completed = !todo.completed
+    },
+    removeSon (id) {
+      this.remove(id)
+    },
+    toggleSon (id) {
+      this.toggle(id)
+    },
+    setCurrentSon (item) {
+      this.setCurrent(item)
     }
   },
   watch: {
