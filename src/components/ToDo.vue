@@ -164,13 +164,13 @@ window.ms = {
     max-width: 500px;
     margin: 0 auto;
   }
-  input, button {
-    display: inline-block;
+  input, button, textarea {
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 3px;
     padding: 5px 10px;
   }
   input {
+    display: block;
     width: 100%;
   }
 </style>

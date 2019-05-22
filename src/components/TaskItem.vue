@@ -1,6 +1,6 @@
 <template>
   <div class="task-item">
-    <button @click="toggle(todoItem.id)">完成</button>
+    <div @click="toggle(todoItem.id)" :class="[ todoItem.completed ? 'completed' : 'toggle-complete' ]"></div>
     {{todoItem.title}}--{{ todoItem.id }}
     <button @click="remove(todoItem.id)">删除</button>
     <button @click="setCurrent(todoItem)">更新</button>
@@ -26,5 +26,26 @@ export default {
 </script>
 
 <style scoped>
-
+  .toggle-complete, .completed {
+    width: 30px;
+    height: 30px;
+    border: 1px solid;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .toggle-complete {
+    border-color: #46a9e4;
+    background: #1ac7ff;
+  }
+  .toggle-complete:hover {
+    background: #3e9bd2;
+    border-color: #3587b7;
+  }
+  .completed {
+    border-color: #bbb;
+    background: #ccc;
+  }
+  .completed:hover {
+    background: #ddd;
+  }
 </style>
