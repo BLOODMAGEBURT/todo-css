@@ -1,7 +1,7 @@
 <template>
   <div class="task-item">
     <div @click="toggle(todoItem.id)" :class="[ todoItem.completed ? 'completed' : 'toggle-complete' ]"></div>
-    {{todoItem.title}}--{{ todoItem.id }}
+    <span class="title">{{todoItem.title}}--{{ todoItem.id }}</span>
     <button @click="remove(todoItem.id)">删除</button>
     <button @click="setCurrent(todoItem)">更新</button>
   </div>
@@ -47,5 +47,29 @@ export default {
   }
   .completed:hover {
     background: #ddd;
+  }
+  .task-item {
+    padding: 10px;
+  }
+  .task-item:hover {
+    background: rgba(0, 0, 0, .03);
+  }
+  .task-item button {
+    display: none;
+    font-size: 80%;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 3px;
+    padding: 5px 10px;
+  }
+  .task-item:hover button {
+    display: inline-block;
+  }
+  .task-item > * {
+    vertical-align: middle;
+    line-height: 1.2;
+  }
+  .task-item .title {
+    padding: 15px;
   }
 </style>

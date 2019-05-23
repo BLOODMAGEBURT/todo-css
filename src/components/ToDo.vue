@@ -1,20 +1,19 @@
 <template>
   <div class="todo">
     <div class="navbar">
-      <h1>can i help you</h1>
+      <h1>要做事啦</h1>
     </div>
     <div class="header">
-      please do it
+      天黑请闭眼
     </div>
     <form id="task-form" @submit.prevent="addOrUpdate">
       <div class="wrap">
         <input type="text" id="task-input" @keyup.enter="addOrUpdate" v-model="current.title" autocomplete="off"/>
-        <button type="submit">submit</button>
       </div>
     </form>
     <div class="task-list">
       <div class="wrap">
-        未完成
+        <div class="segment-title">未完成</div>
         <TaskItem v-if="!item.completed"
                   v-for="item in list"
                   :key="item.id" :todoItem="item"
@@ -26,7 +25,7 @@
     </div>
     <div class="task-list">
       <div class="wrap">
-        已完成
+        <div class="segment-title">已完成</div>
         <TaskItem v-if="item.completed"
                   v-for="item in list"
                   :key="item.id" :todoItem="item"
@@ -136,7 +135,6 @@ window.ms = {
 
 <style scoped>
   * {
-    background-color: rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
   }
 
@@ -172,5 +170,10 @@ window.ms = {
   input {
     display: block;
     width: 100%;
+  }
+  .segment-title {
+    margin: 15px 0;
+    color: #aaa;
+    font-weight: lighter;
   }
 </style>
