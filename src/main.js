@@ -10,8 +10,9 @@ import axios from 'axios'
 
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
-Vue.prototype.API = '/api'
-axios.defaults.baseURL = Vue.prototype.API
+// Vue.prototype.API = '140.143.163.99'
+// Vue.prototype.HOST = '/api'
+// axios.defaults.baseURL = Vue.prototype.HOST
 
 // Vue.use(ElementUI)
 /* eslint-disable no-new */

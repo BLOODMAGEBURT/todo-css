@@ -143,7 +143,7 @@ window.ms = {
   }
 
   .navbar {
-    background: #db1822;
+    background: #ccc;
     color: #f5ebeb;
     padding: 10px 0;
   }

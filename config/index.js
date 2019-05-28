@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/api":{
-        target:"http://www.yxreader.com",
-        changeOrigin:true,
+        target:"http://192.168.1.145/api",
+        changeOrigin: true,
         pathRewrite:{
           '^/api':''
         }
