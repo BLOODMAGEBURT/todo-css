@@ -14,7 +14,7 @@
     <div class="task-list">
       <div class="wrap">
         <div class="segment-title">未完成</div>
-        <TaskItem v-if="!item.completed"
+        <TaskItem v-if="!item.is_completed"
                   v-for="item in list"
                   :key="item.id" :todoItem="item"
                   @remove="removeSon"
@@ -26,7 +26,7 @@
     <div class="task-list">
       <div class="wrap">
         <div class="segment-title">已完成</div>
-        <TaskItem v-if="item.completed"
+        <TaskItem v-if="item.is_completed"
                   v-for="item in list"
                   :key="item.id" :todoItem="item"
                   @remove="removeSon"
@@ -50,6 +50,24 @@ export default {
   },
   mounted () {
     this.list = window.ms.get('list') || []
+    let token = 'Bearer ' + localStorage.getItem('token')
+    this.axios({
+      url: '/api/todo',
+      method: 'get',
+      headers: {
+        'Authorization': token
+      },
+      responseType: 'json'
+    })
+      .then(response => {
+        console.log(response.data)
+        this.list = response.data.items
+        return response
+      })
+      .catch(error => {
+        console.log(error)
+        return error
+      })
   },
   methods: {
     addOrUpdate () {
@@ -65,7 +83,7 @@ export default {
         if (!title) return
         console.log(123)
         currentTodo.id = this.getNextId()
-        currentTodo.completed = false
+        currentTodo.is_completed = false
         this.list.push(currentTodo)
       }
       this.reset()
@@ -87,7 +105,7 @@ export default {
     copy: obj => Object.assign({}, obj),
     toggle (itemId) {
       let todo = this.list.find(item => item.id === itemId)
-      todo.completed = !todo.completed
+      todo.is_completed = !todo.is_completed
     },
     removeSon (id) {
       this.remove(id)

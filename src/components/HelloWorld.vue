@@ -31,9 +31,6 @@ export default {
       this.axios({
         url: '/api/login',
         method: 'post',
-        // header: {
-        //   'Content-Type': 'application/json'
-        // },
         data: {
           name: this.username,
           pwd: this.password
@@ -41,7 +38,12 @@ export default {
         responseType: 'json'
       })
         .then(response => {
-          this.res = response.data.msg
+          this.res = response.data.token
+          localStorage.setItem('token', response.data.token)
+          this.$router.push({
+            path: '/todo'
+          })
+          console.log(response.data)
           return response
         })
         .catch(error => {

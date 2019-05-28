@@ -1,7 +1,7 @@
 <template>
   <div class="task-item">
-    <div @click="toggle(todoItem.id)" :class="[ todoItem.completed ? 'completed' : 'toggle-complete' ]"></div>
-    <span class="title">{{todoItem.title}}--{{ todoItem.id }}</span>
+    <div @click="toggle(todoItem.id)" :class="[ todoItem.is_completed ? 'completed' : 'toggle-complete' ]"></div>
+    <span class="title">{{todoItem.title}}</span>
     <button @click="remove(todoItem.id)">删除</button>
     <button @click="setCurrent(todoItem)">更新</button>
   </div>
