@@ -49,10 +49,9 @@ export default {
     }
   },
   mounted () {
-    this.list = window.ms.get('list') || []
     let token = 'Bearer ' + localStorage.getItem('token')
     this.axios({
-      url: '/api/todo',
+      url: '/api/todo_types/1',
       method: 'get',
       headers: {
         'Authorization': token
@@ -61,7 +60,7 @@ export default {
     })
       .then(response => {
         console.log(response.data)
-        this.list = response.data.items
+        this.list = response.data.todo_items || []
         return response
       })
       .catch(error => {
@@ -78,19 +77,67 @@ export default {
         // update
         let todo = this.list.find(item => item.id === id)
         todo.title = title
+        let token = 'Bearer ' + localStorage.getItem('token')
+        this.axios({
+          url: '/api/todo/' + id,
+          method: 'put',
+          headers: {
+            'Authorization': token
+          },
+          data: {
+            title: todo.title,
+            is_completed: todo.is_completed
+          }
+        })
+          .then(response => {
+            console.log('responseData:' + response)
+          })
+          .catch(error => {
+            console.log('errorData:' + error.response.data)
+          })
       } else {
         // add
         if (!title) return
-        console.log(123)
-        currentTodo.id = this.getNextId()
         currentTodo.is_completed = false
         this.list.push(currentTodo)
+        let token = 'Bearer ' + localStorage.getItem('token')
+        this.axios({
+          url: '/api/todo',
+          method: 'post',
+          headers: {
+            'Authorization': token
+          },
+          data: {
+            type_id: 1,
+            title: title
+          }
+        })
+          .then(response => {
+            console.log('responseData:' + response)
+          })
+          .catch(error => {
+            console.log('errorData:' + error.response.data)
+          })
       }
       this.reset()
     },
     remove (id) {
       let index = this.list.findIndex(item => item.id === id)
       this.list.splice(index, 1)
+      let token = 'Bearer ' + localStorage.getItem('token')
+      this.axios({
+        url: '/api/todo/' + id,
+        method: 'delete',
+        headers: {
+          'Authorization': token
+        }
+      })
+        .then(response => {
+          console.log('responseData:' + response)
+        })
+        .catch(error => {
+          console.log('errorData:' + error.response.data)
+        })
     },
     // getNextId: () => this.list.length + 1
     getNextId () {
@@ -106,6 +153,27 @@ export default {
     toggle (itemId) {
       let todo = this.list.find(item => item.id === itemId)
       todo.is_completed = !todo.is_completed
+
+      let token = 'Bearer ' + localStorage.getItem('token')
+      this.axios({
+        url: '/api/todo/' + itemId,
+        method: 'put',
+        headers: {
+          'Authorization': token
+        },
+        data: {
+          title: todo.title,
+          is_completed: todo.is_completed
+        }
+      })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('i am wrong, please try again later')
+          todo.is_completed = !todo.is_completed
+        })
     },
     removeSon (id) {
       this.remove(id)
